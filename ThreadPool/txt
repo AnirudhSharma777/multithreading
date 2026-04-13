@@ -1,0 +1,77 @@
+Executors Framework in Java
+
+The Executors Framework was introduced in  java5 as part of the java.util.concurrent package
+to simplify the development of concurrent applications by abstracting away many of the complexities
+involved in creating and managing threads.
+
+Problems before Executors Framework:
+
+1. Manual Thread Management
+2. Resource Management
+3. Scalability
+4. Thread Reuse
+5. Error handling
+
+
+Executors framework has three thinks
+
+1. Executor -> this is a interface
+2. ExecutorService -> this is service implementation using executor interface
+3. ScheduledExecutorService -> as the name suggested for Scheduled....
+
+
+How ThreadPool Internally works:
+
+Architecture:
+
+        Tasks Submitted
+              |
+              v
+        Blocking Queue
+              |
+              v
+     Worker Threads (Pool)
+     |      |       |
+     T1     T2      T3
+
+Steps:
+
+1. Task is submitted
+2. If a thread is free → execute
+3. If all threads busy → task goes to queue
+4. When thread becomes free → picks task from queue
+
+
+What is Future?
+
+A Future is returned when you submit a task to an ExecutorService.
+It let you:
+Check if the task is done
+Get the result(blocking)
+Cancel the task
+
+ExecutorService executor = Executors.newFixedThreadPool(2);
+
+Future<?> future = executor.submit(() -> {
+    Thread.Sleep(2000);
+    return 42;
+});
+
+
+Runnable vs Callable
+
+ Runnable -> no return value
+ Callable<T> -> returns value -> used with Future
+
+ Future<?> f1 = executor.submit(() -> System.out.println("Runnable"));
+ Future<Integer> f2 = executor.submit(() -> 10); // Callable
+
+
+
+Problem with Future
+Cannot chain tasks
+No callback mechanism
+Blocking nature
+
+👉 That’s why Java introduced:
+➡️ CompletableFuture (very important for interviews)
